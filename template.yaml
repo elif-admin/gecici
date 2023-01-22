@@ -29,9 +29,6 @@ Resources:
       KeyName: !Ref KeyName
       SecurityGroupIds:
         - !Ref SecGr
-      Tags:
-        - Key: Name
-          Value: Web Server of ${AWS::StackName}
       UserData: !Base64 |
         #!/bin/bash
         yum update -y
@@ -40,8 +37,8 @@ Resources:
         cd /home/ec2-user
         wget https://raw.githubusercontent.com/elif-admin/gecici/main/app.py
         mkdir templates && cd templates
-        wget https://raw.githubusercontent.com/elif-admin/gecici/main/index.html
-        wget https://raw.githubusercontent.com/elif-admin/gecici/main/result.html
+        wget https://raw.githubusercontent.com/elif-admin/gecici/main/templates/index.html
+        wget https://raw.githubusercontent.com/elif-admin/gecici/main/templates/result.html
         cd ..
         python3 app.py
 Outputs:
