@@ -1,0 +1,94 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: |
+  elif's template
+
+Parameters:
+  InstanceType:
+    Description: Select your instance type.
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t2.nano
+      - t3.micro
+      - m1.small
+
+  KeyName:
+    Description: Select your keypair.
+    Type: AWS::EC2::KeyPair::KeyName
+
+
+
+  
+  
+Mappings:
+  RegionImageMap:
+    us-east-1:
+      AMI: ami-0b5eea76982371e91
+    us-east-2:
+      AMI: ami-0233c2d874b811deb
+    us-west-1:
+      AMI: ami-0ed05376b59b90e46
+    us-west-2:
+      AMI: ami-0dc8f589abe99f538
+    eu-west-1:
+      AMI: ami-058b1b7fe545997ae
+  
+  
+
+  
+Resources:
+
+  SecGr:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: myworld # Required
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0 
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0 
+
+
+  MyEC2:
+    Type: AWS::EC2::LaunchTemplate
+    Properties:
+      LaunchTemplateData:
+        ImageId: !FindInMap 
+          - RegionImageMap
+          - !Ref "AWS::Region"
+          - AMI
+        InstanceType: !Ref InstanceType
+        KeyName: !Ref KeyName
+        SecurityGroupIds:
+          - !Ref SecGr
+        Tags:
+            Key: keyname
+            Value: Web Server of ${AWS::StackName}      
+        UserData: !Base64  |
+          #! /bin/bash
+          yum update -y
+          yum install python3 -y
+          pip3 install flask
+          yum install git -y
+          cd /home/ec2-user
+          wget -P templates https://raw.githubusercontent.com/serdarcw/cli_deneme/master/templates/index.html
+          wget -P templates https://raw.githubusercontent.com/serdarcw/cli_deneme/master/templates/result.html
+          wget https://raw.githubusercontent.com/serdarcw/cli_deneme/master/app.py
+          python3 app.py
+
+      LaunchTemplateName: elifcfn
+
+
+  
+Outputs:
+  WebURL:
+    Description: The DNSName of web
+    Value: !Join 
+      - ''
+      - - 'http://'
+        - !GetAtt MyEC2.PublicDnsName 

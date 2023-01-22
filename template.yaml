@@ -6,10 +6,11 @@ Parameters:
     Description: Select your valid keypair name
     Type: AWS::EC2::KeyPair::KeyName
 Resources:
+
   SecGr:
     Type: AWS::EC2::SecurityGroup
     Properties:
-      GroupDescription: adamsin
+      GroupDescription: myworld
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 80
@@ -19,27 +20,28 @@ Resources:
           FromPort: 22
           ToPort: 22
           CidrIp: 0.0.0.0/0
+
   MyEC2:
     Type: AWS::EC2::Instance
     Properties:
-      ImageId: ami-0c2b8ca1dad447f8a
+      ImageId: ami-0b5eea76982371e91
       InstanceType: t2.micro
       KeyName: !Ref KeyName
       SecurityGroupIds:
         - !Ref SecGr
       Tags:
         - Key: Name
-          Value: this is ${AWS::StackName} instance
+          Value: Web Server of ${AWS::StackName}
       UserData: !Base64 |
         #!/bin/bash
         yum update -y
         yum install python3 -y
         pip3 install flask
         cd /home/ec2-user
-        wget https://raw.githubusercontent.com/hakancar/my-projects/main/Project-001-Roman-Numerals-Converter/app.py
+        wget https://raw.githubusercontent.com/elif-admin/gecici/main/app.py
         mkdir templates && cd templates
-        wget https://raw.githubusercontent.com/hakancar/my-projects/main/Project-001-Roman-Numerals-Converter/templates/index.html
-        wget https://raw.githubusercontent.com/hakancar/my-projects/main/Project-001-Roman-Numerals-Converter/templates/result.html
+        wget https://raw.githubusercontent.com/elif-admin/gecici/main/index.html
+        wget https://raw.githubusercontent.com/elif-admin/gecici/main/result.html
         cd ..
         python3 app.py
 Outputs:
