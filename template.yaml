@@ -41,6 +41,9 @@ Resources:
         wget https://raw.githubusercontent.com/elif-admin/gecici/main/templates/result.html
         cd ..
         python3 app.py
+      Tags:
+        - Value: !Sub Web Server of  ${AWS::StackName} stack 
+          Key: Name
 Outputs:
   WebURL:
     Description: The DNSName of the web server
