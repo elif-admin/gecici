@@ -43,8 +43,8 @@ Resources:
         wget https://raw.githubusercontent.com/elif-admin/roman-numbers-converter/main/app.py
         mkdir templates
         cd templates
-        wget https://raw.githubusercontent.com/elif-admin/roman-numbers-converter/main/app.py
-        wget https://raw.githubusercontent.com/elif-admin/roman-numbers-converter/main/app.py
+        wget https://raw.githubusercontent.com/elif-admin/roman-numbers-converter/main/templates/index.html
+        wget https://raw.githubusercontent.com/elif-admin/roman-numbers-converter/main/templates/result.html
         cd ..
         python3 app.py
       Tags:
